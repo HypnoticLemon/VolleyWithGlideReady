@@ -5,9 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private DemoAdapter demoAdapter;
     private List<DemoModel> demoAdapterList;
     private Context context;
+    private String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         demoAdapterList = new ArrayList<>();
         recyclerLayout.setHasFixedSize(true);
         recyclerLayout.setLayoutManager(new LinearLayoutManager(context));
+        generateAES();
 
         for (int i = 0; i < 5; i++) {
             DemoModel demoModel = new DemoModel();
@@ -46,4 +50,24 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(context, "Item Click", Toast.LENGTH_LONG).show();
         }
     };
+
+
+    public void generateAES() {
+        byte[] encryptionKey = "MZygpewJsCpRrfOr".getBytes(StandardCharsets.UTF_8);
+        byte[] plainText = "Vikrant Shah".getBytes(StandardCharsets.UTF_8);
+        AdvancedEncryptionStandard advancedEncryptionStandard = new AdvancedEncryptionStandard(
+                encryptionKey);
+        byte[] cipherText = new byte[0];
+        byte[] decryptedCipherText = new byte[0];
+        try {
+            cipherText = advancedEncryptionStandard.encrypt(plainText);
+            decryptedCipherText = advancedEncryptionStandard.decrypt(cipherText);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Log.e(TAG, "generateMD5: plainText = " + new String(plainText) );
+        Log.e(TAG, "generateMD5: cipherText= " + new String(cipherText));
+        Log.e(TAG, "generateMD5: decryptedCipherText= " + new String(decryptedCipherText));
+    }
 }
